@@ -1,11 +1,15 @@
 name: Deploy to EC2
 
 on:
-  push:
+  workflow_run:
+    workflows: [Continuous Integration]
     branches: [ main ]
+    types: 
+      - completed 
 
 jobs:
   build-and-deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     # "environment" must match the name of your GitHub environment
     environment: prod
